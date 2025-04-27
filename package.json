@@ -1,0 +1,82 @@
+{
+  "name": "debarrel",
+  "displayName": "debarrel",
+  "description": "Remove barrel files from Typescript projects.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.99.0"
+  },
+  "publisher": "debarrel",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:**/tsconfig.ts"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.debarrel",
+        "title": "Debarrel"
+      },
+      {
+        "command": "debarrel.deleteFile",
+        "title": "Delete File",
+        "icon": "resources/icon.png"
+      },
+      {
+        "command": "debarrel.replaceBarrelImports",
+        "title": "Replace Barrel Imports"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "debarrel",
+          "title": "Barrel Files",
+          "icon": "resources/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "debarrel": [
+        {
+          "id": "debarrel",
+          "name": "Barrel Files",
+          "icon": "resources/icon.png",
+          "contextualTitle": "Barrel Files"
+        }
+      ]
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "debarrel.deleteFile",
+          "when": "viewItem == file",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./src",
+    "watch": "tsc -w -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
+    "@typescript-eslint/eslint-plugin": "^8.28.0",
+    "@typescript-eslint/parser": "^8.28.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2"
+  }
+}
