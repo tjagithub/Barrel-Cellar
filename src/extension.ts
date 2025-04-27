@@ -7,7 +7,7 @@ import { BarrelFilesProvider } from './barrel.treeview';
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "debarrel" is now active!');
-	vscode.window.registerTreeDataProvider('debarrel', new BarrelFilesProvider(context));
+	vscode.window.registerTreeDataProvider('barrel-cellar', new BarrelFilesProvider(context));
 }
 
 // This method is called when your extension is deactivated

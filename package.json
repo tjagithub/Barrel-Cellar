@@ -1,12 +1,12 @@
 {
-  "name": "debarrel",
-  "displayName": "debarrel",
-  "description": "Remove barrel files from Typescript projects.",
+  "name": "barrel-cellar",
+  "displayName": "Barrel Cellar",
+  "description": "A Visual Studio Code extension to manage and visualize barrel files in TypeScript projects.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.99.0"
   },
-  "publisher": "debarrel",
+  "publisher": "TJA",
   "categories": [
     "Other"
   ],
@@ -15,53 +15,29 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "extension.debarrel",
-        "title": "Debarrel"
-      },
-      {
-        "command": "debarrel.deleteFile",
-        "title": "Delete File",
-        "icon": "resources/icon.png"
-      },
-      {
-        "command": "debarrel.replaceBarrelImports",
-        "title": "Replace Barrel Imports"
-      }
-    ],
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "debarrel",
-          "title": "Barrel Files",
+          "id": "barrel-cellar",
+          "title": "Barrel Cellar",
           "icon": "resources/icon.png"
         }
       ]
     },
     "views": {
-      "debarrel": [
+      "barrel-cellar": [
         {
-          "id": "debarrel",
+          "id": "barrel-cellar",
           "name": "Barrel Files",
           "icon": "resources/icon.png",
           "contextualTitle": "Barrel Files"
-        }
-      ]
-    },
-    "menus": {
-      "view/item/context": [
-        {
-          "command": "debarrel.deleteFile",
-          "when": "viewItem == file",
-          "group": "inline"
         }
       ]
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./src",
+    "compile": "tsc -p ./",
     "watch": "tsc -w -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",

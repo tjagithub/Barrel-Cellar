@@ -21,9 +21,12 @@ export interface BarrelFile {
     exports: ExportedModuleInfo[];
 }
 
+// biome-ignore lint/suspicious/noConfusingVoidType: wont fix
+type BarrelTreeData = BarrelFile | undefined | void;
+
 export class BarrelFilesProvider implements vscode.TreeDataProvider<BarrelFile> {
-    private _onDidChangeTreeData: vscode.EventEmitter<BarrelFile | undefined | void> = new vscode.EventEmitter<BarrelFile | undefined | void>();
-    readonly onDidChangeTreeData: vscode.Event<BarrelFile | undefined | void> = this._onDidChangeTreeData.event;
+    private readonly _onDidChangeTreeData: vscode.EventEmitter<BarrelTreeData> = new vscode.EventEmitter<BarrelTreeData>();
+    readonly onDidChangeTreeData: vscode.Event<BarrelTreeData> = this._onDidChangeTreeData.event;
 
     constructor(private readonly context: vscode.ExtensionContext) {
         const watcher = vscode.workspace.createFileSystemWatcher("**/*.{ts,tsx}");
@@ -46,13 +49,9 @@ export class BarrelFilesProvider implements vscode.TreeDataProvider<BarrelFile> 
         }
 
         if (element) {
-            return Promise.resolve(element.exports.map(exportInfo => {
-                const childBarrelFile = this.parseBarrel(exportInfo.path);
-                return {
-                    barrelPath: exportInfo.path,
-                    exports: childBarrelFile.exports,
-                };
-            }));
+            return element.exports.length === 0
+                ? Promise.resolve(this.findFilesUsingBarrel(element.barrelPath).map(filePath => ({ barrelPath: filePath, exports: [] })))
+                : Promise.resolve(element.exports.map(exp => ({ barrelPath: exp.path, exports: [] })));
         }
 
         const barrelFiles: BarrelFile[] = [];
@@ -76,6 +75,35 @@ export class BarrelFilesProvider implements vscode.TreeDataProvider<BarrelFile> 
         }
 
         return Promise.resolve(barrelFiles);
+    }
+
+    private findFilesUsingBarrel(barrelPath: string): string[] {
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders) {
+            return [];
+        }
+
+        const filesUsingBarrel: string[] = [];
+
+        const searchFiles = (directory: string) => {
+            for (const file of fs.readdirSync(directory)) {
+                const filePath = path.join(directory, file);
+                if (fs.statSync(filePath).isDirectory()) {
+                    searchFiles(filePath);
+                } else if (file.endsWith('.ts')) {
+                    const content = fs.readFileSync(filePath, 'utf8');
+                    if (content.includes(`'${barrelPath}'`) || content.includes(`"${barrelPath}"`)) {
+                        filesUsingBarrel.push(filePath);
+                    }
+                }
+            }
+        };
+
+        for (const folder of workspaceFolders) {
+            searchFiles(folder.uri.fsPath);
+        }
+
+        return filesUsingBarrel;
     }
 
     private resolveModulePath(baseDir: string, moduleSpecifier: string): string | undefined {
@@ -129,10 +157,6 @@ export class BarrelFilesProvider implements vscode.TreeDataProvider<BarrelFile> 
     }
 
     getTreeItem(element: BarrelFile): vscode.TreeItem {
-        const isTopLevel = vscode.workspace.workspaceFolders?.some(folder => 
-            path.dirname(element.barrelPath) === folder.uri.fsPath
-        );
-
         const isIndexFile = path.basename(element.barrelPath) === 'index.ts';
         const parentFolderName = path.basename(path.dirname(element.barrelPath));
 
@@ -156,8 +180,8 @@ export class BarrelFilesProvider implements vscode.TreeDataProvider<BarrelFile> 
             tooltip: `Barrel file: ${element.barrelPath}`,
             description: element.exports.length > 0 ? `Exports: ${element.exports.length}` : "Used for barrel file(s)",
             iconPath: {
-                light: this.context.asAbsolutePath(path.join('resources', 'light', isIndexFile ? 'folder.png' : 'file.png')),
-                dark: this.context.asAbsolutePath(path.join('resources', 'dark', isIndexFile ? 'folder.png' : 'file.png')),
+                light: vscode.Uri.file(this.context.asAbsolutePath(path.join('resources', 'light', isIndexFile ? 'folder.png' : 'file.png'))),
+                dark: vscode.Uri.file(this.context.asAbsolutePath(path.join('resources', 'dark', isIndexFile ? 'folder.png' : 'file.png'))),
             },
         };
     }

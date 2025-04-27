@@ -1,71 +1,54 @@
-# debarrel README
+# Barrel Cellar README
 
-This is the README for your extension "debarrel". After writing up a brief description, we recommend including the following sections.
+Debarrel is now renamed to Barrel Cellar! This extension helps developers manage and visualize barrel files in TypeScript projects.
+
+## Overview
+
+Barrel Cellar is a Visual Studio Code extension designed to help developers manage and visualize barrel files in TypeScript projects. Barrel files (e.g., `index.ts`) are commonly used to re-export modules, making imports cleaner and more maintainable. This extension provides a tree view to list barrel files, their exports, and the files that use them.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+- **Barrel File Detection**: Automatically detects `index.ts` files in your workspace.
+- **Export Visualization**: Displays the modules exported by each barrel file.
+- **Usage Tracking**: Identifies files that import a specific barrel file.
+- **Interactive Tree View**: Navigate through barrel files, their exports, and usage directly from the activity bar.
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Visual Studio Code version 1.99.0 or higher.
+- TypeScript installed in your project.
+
+## Installation
+
+1. Open the Extensions view in VS Code (`Ctrl+Shift+X` or `Cmd+Shift+X` on macOS).
+2. Search for "Barrel Cellar" and click `Install`.
+3. Reload VS Code if prompted.
+
+## Usage
+
+1. Open a TypeScript project in VS Code.
+2. Navigate to the "Barrel Cellar" view in the activity bar.
+3. Explore the tree view to see barrel files, their exports, and usage.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+This extension does not currently add any custom settings.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Large projects with many barrel files may take longer to load.
+- Only supports TypeScript files (`.ts`, `.tsx`).
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
+- Initial release with basic barrel file detection and visualization.
 
-Initial release of ...
+## Contributing
 
-### 1.0.1
+Contributions are welcome! Feel free to open issues or submit pull requests on the [GitHub repository](https://github.com/tjagithub/debarrel).
 
-Fixed issue #.
+## License
 
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+This extension is licensed under the MIT License.
