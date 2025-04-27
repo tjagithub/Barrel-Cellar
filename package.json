@@ -35,6 +35,7 @@
       ]
     }
   },
+  "repository": "www.github.com/tjagithub/barrel-cellar.git",
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",

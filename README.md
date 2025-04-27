@@ -47,7 +47,7 @@ This extension does not currently add any custom settings.
 
 ## Contributing
 
-Contributions are welcome! Feel free to open issues or submit pull requests on the [GitHub repository](https://github.com/tjagithub/debarrel).
+Contributions are welcome! Feel free to open issues or submit pull requests on the [GitHub repository](https://github.com/tjagithub/barrelcellar).
 
 ## License
 
