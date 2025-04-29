@@ -1,6 +1,6 @@
 # Barrel Cellar README
 
-Debarrel is now renamed to Barrel Cellar! This extension helps developers manage and visualize barrel files in TypeScript projects.
+This extension helps developers manage and visualize barrel files in TypeScript projects.
 
 ## Overview
 

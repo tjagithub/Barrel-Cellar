@@ -11,23 +11,35 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "space"
 	},
 	"organizeImports": {
-		"enabled": true
+		"enabled": true,
+		"include": ["**/*.ts", "**/*.js"]
 	},
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true,
+			"all": true,
 			"complexity": {
 				"noForEach": "off"
-			}
+			},
 		}
 	},
-	"javascript": {
+	"json": {
+		"assists": {
+			"enabled": true
+		},
 		"formatter": {
-			"quoteStyle": "double"
+			"enabled": true,
+			"trailingCommas": "none"
+		},
+		"linter": {
+			"enabled": true
+		},
+		"parser": {
+			"allowComments": false,
+			"allowTrailingCommas": false
 		}
 	}
 }

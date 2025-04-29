@@ -2,7 +2,7 @@
   "name": "barrel-cellar",
   "displayName": "Barrel Cellar",
   "description": "A Visual Studio Code extension to manage and visualize barrel files in TypeScript projects.",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.99.0"
   },
@@ -12,7 +12,7 @@
     "Other"
   ],
   "activationEvents": [
-    "workspaceContains:**/tsconfig.ts"
+    "workspaceContains:tsconfig.json"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -25,13 +25,17 @@
         }
       ]
     },
+    "menus":{
+    },
     "views": {
       "barrel-cellar": [
         {
           "id": "barrel.cellar",
           "name": "Barrel Files",
           "icon": "resources/extensionicon-dark.png",
-          "contextualTitle": "Barrel Files"
+          "contextualTitle": "Barrel Files",
+          "visibility": "visible",
+          "type": "tree"
         }
       ]
     }
@@ -45,6 +49,9 @@
     "lint": "eslint src",
     "test": "vscode-test"
   },
+  "dependencies": {
+    "typescript": "^5.8.2"
+  },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/mocha": "^10.0.10",
@@ -54,7 +61,6 @@
     "@typescript-eslint/parser": "^8.28.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
-    "eslint": "^9.23.0",
-    "typescript": "^5.8.2"
+    "eslint": "^9.23.0"
   }
 }
