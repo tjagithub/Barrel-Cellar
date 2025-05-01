@@ -2,7 +2,7 @@
   "name": "barrel-cellar",
   "displayName": "Barrel Cellar",
   "description": "A Visual Studio Code extension to manage and visualize barrel files in TypeScript projects.",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "engines": {
     "vscode": "^1.99.0"
   },
@@ -25,8 +25,12 @@
         }
       ]
     },
-    "menus":{
-    },
+    "commands": [
+      {
+        "command": "barrel-cellar.showTree",
+        "title": "Show Tree"
+      }
+    ],
     "views": {
       "barrel-cellar": [
         {

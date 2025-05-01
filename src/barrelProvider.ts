@@ -17,7 +17,7 @@ class TreeItem extends vscode.TreeItem {
     private readonly name: string;
     constructor(public readonly directory: string, isDirectory: boolean, isBarrel?: boolean) {
         super(directory, isDirectory || isBarrel ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None);
-        this.name = directory.split('\\').pop() ?? directory.split('/').pop() ?? directory;
+        this.name = path.basename(this.directory);
         this.isBarrel = isBarrel ?? false;
         const icon = isBarrel ? 'output-view-icon' : isDirectory ? 'folder' : 'file';
         const labelName = isBarrel ? 'Barrel: ' + this.name : this.name;
@@ -37,10 +37,10 @@ class TreeItem extends vscode.TreeItem {
                 arguments: [vscode.Uri.file(directory)],
             };
         }
-        this.description = this.directory.replace(vscode.workspace.workspaceFolders?.[0]?.uri.fsPath ?? '', '');
+        this.description = !isDirectory ? `Exports: ${getNumberOfExports(directory)}; Imports: ${getNumberOfImports(directory)}` : '';
         this.collapsibleState = isDirectory || isBarrel ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.None;
         this.resourceUri = vscode.Uri.file(this.directory);
-        this.tooltip = this.directory;
+        this.tooltip = path.basename(this.directory);
     }
 }
 
@@ -111,15 +111,16 @@ export class BarrelViewProvider implements vscode.TreeDataProvider<TreeItem> {
         const directory = element ? element.directory : this.workspacePath;
         let files: string[];
         try {
-            files = fs.readdirSync(directory);
+            files = fs.readdirSync(directory)
+            .filter(file => {
+                const filePath = path.join(directory, file);
+                const hasIndex = fs.existsSync(path.join(filePath, 'index.ts')) && getNumberOfExports(path.join(filePath, 'index.ts')) > 0;
+                return file !== 'node_modules' && !file.startsWith('.') && (fs.statSync(filePath).isFile() || hasIndex);
+            });
         } catch {
             return Promise.resolve([]);
         }
         const items: TreeItem[] = [];
-        // if (items.length === 0) {
-        //     items.push(new TreeItem(this.workspacePath, true, false));
-        // }
-        // Always add subdirectories
         for (const file of files) {
             const filePath = path.join(directory, file);
             let stat: fs.Stats;
@@ -159,3 +160,25 @@ const checkBarrelFile = (filePath: string): boolean => {
     });
     return isBarrelFile;
 };
+
+const getNumberOfExports = (filePath: string): number => {
+    const sourceFile = ts.createSourceFile(filePath, fs.readFileSync(filePath, 'utf-8'), ts.ScriptTarget.Latest, true);
+    let exportCount = 0;
+    ts.forEachChild(sourceFile, node => {
+        if (ts.isExportDeclaration(node) && node.moduleSpecifier) {
+            exportCount++;
+        }
+    });
+    return exportCount;
+}
+
+const getNumberOfImports = (filePath: string): number => {
+    const sourceFile = ts.createSourceFile(filePath, fs.readFileSync(filePath, 'utf-8'), ts.ScriptTarget.Latest, true);
+    let importCount = 0;
+    ts.forEachChild(sourceFile, node => {
+        if (ts.isImportDeclaration(node) && node.moduleSpecifier) {
+            importCount++;
+        }
+    });
+    return importCount;
+}
