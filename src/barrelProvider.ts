@@ -64,7 +64,7 @@ const getExportSymbolCounts = (filePath: string) => {
     } else if (ts.isExportAssignment(node)) {
       value.push(1);
     } else if (
-      node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
+      ts.canHaveModifiers(node) && ts.getModifiers(node)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
     ) {
       handleExportKeyword(node);
     }
@@ -358,8 +358,7 @@ const getNumberOfExports = (filePath: string, typeOnly = false): number => {
         exportCount++;
       }
     } else if (
-      node.modifiers &&
-      node.modifiers.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
+      ts.canHaveModifiers(node) && ts.getModifiers(node)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
     ) {
       // For type-only, check if it's a type declaration
       const isType =
