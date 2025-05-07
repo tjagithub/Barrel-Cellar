@@ -7,11 +7,13 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
+		"include": ["./src/**/*"],
 		"ignore": ["node_modules", "sampleWorkspace", "dist", "out", "coverage", ".vscode-test"]
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "space"
+		"indentStyle": "space",
+		"lineWidth": 80
 	},
 	"organizeImports": {
 		"enabled": true,
@@ -23,7 +25,7 @@
 			"all": true,
 			"complexity": {
 				"noForEach": "off"
-			},
+			}
 		}
 	},
 	"json": {
